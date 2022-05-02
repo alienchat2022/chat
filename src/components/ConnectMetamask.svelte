@@ -72,7 +72,7 @@
       <p class="errorMessage" class:active={matamaskErrorState}>
         {metamaskErrorMessage}
       </p>
-      <button href="/home">Go to Home Page</button>
+      <a href="/home">Go to Home Page</a>
     </div>
   {/if}
 </div>
@@ -142,7 +142,8 @@
   p.errorMessage.active {
     opacity: 1;
   }
-  .connect__pop-up-items button {
+  .connect__pop-up-items button,
+  .connect__pop-up-items a {
     padding: 17.5px 51px;
     border-radius: 10px;
     background-color: #c092ff;
