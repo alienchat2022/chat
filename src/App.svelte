@@ -226,10 +226,12 @@
 
   // send message
   const sendMessage = async () => {
+    updatingFormState = true;
     let data;
     if (messageText.length < 1) {
       showTepmErrorMessage(`Can't send empty message`);
       // Can't send empty message
+      updatingFormState = false;
       return;
     }
     try {
@@ -241,6 +243,7 @@
         createdAt: serverTimestamp(),
       };
       await addDoc(collection(db, "Messages"), data);
+      updatingFormState = false
     } catch (error) {
       console.error(error.message);
       return;
@@ -351,6 +354,10 @@
 <style>
   .main__chat__wrapper {
     position: relative;
+  }
+  ul.chat__messages{
+    padding: 0;
+    margin-bottom: 0;
   }
   .wrapper{
     position: absolute;
@@ -519,6 +526,9 @@
     }
   }
   @media screen and (max-width: 991px) {
+    .chat__bg {
+      display: none;
+    }
     .connect__pop-up-items p {
       font-size: 27px;
       line-height: 30px;

@@ -5,6 +5,7 @@
   export let tempMessageWrap;
   export let tepmErrorState;
   export let tepmError;
+  export let updatingFormState;
 
   import { resize } from "../resize";
   let textarea = null,
@@ -42,7 +43,7 @@
 </script>
 
 <div class="chat__form">
-  <form on:submit|preventDefault={sendMessage}>
+  <form on:submit|preventDefault={sendMessage} >
     <div class="form__wrapper">
       <div class="input__wrapper">
         <textarea
@@ -68,7 +69,7 @@
           alt="smile"
         />
       </div>
-      <button type="submit" id="submit">
+      <button type="submit" id="submit"disabled={updatingFormState?true:false}>
         <img
           src="https://uploads-ssl.webflow.com/623494ba6746d1d287d735b3/62594ecca696a51ecf71d653_Send.svg"
           alt="send message"
@@ -92,7 +93,24 @@
     resize: none;
     outline: none;
     resize: none;
+    overflow-y: auto;
+    line-height: normal;
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: 0px; /* Firefox */
   }
+
+  textarea::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+  textarea {
+    scrollbar-color: #fff #fff;
+    scrollbar-width: thin; /* Safari and Chrome */
+  }
+
+  textarea::-moz-scrollbar {
+    display: none;
+  }
+
 
   .chat__form {
     position: relative;
@@ -109,7 +127,6 @@
     height: var(--height);
     min-height: 45px;
     resize: horizontal;
-    overflow: hidden;
 
   }
   #inputForm:focus {
@@ -139,6 +156,7 @@
   .input__wrapper{
     position: relative;
     width: 100%;
+    line-height: initial;
   }
 
   .input__wrapper::after{

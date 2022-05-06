@@ -19,6 +19,7 @@
     changeWrapeerState = false;
   }
   function handleClickOutsideInput(event) {
+    messageText = message.body;
     updateState = false;
   }
   function handleWrapperState() {
@@ -36,6 +37,7 @@
   }
 
   function updateMessageState() {
+    
     updateState = true;
     changeWrapeerState = false;
     if (messages.length - 1 === index) {
@@ -170,14 +172,18 @@
     display: flex;
     max-width: 100%;
   }
+  .update__form img{
+    width: 24px;
+    height: 24px;
+  }
   .editable {
     width: 100%;
     max-width: 360px;
     border: 1px solid #ffffff;
     padding: 10px;
     border-radius: 8px;
-   /*  white-space: pre; */
-   text-align: right;
+     white-space: pre-wrap; 
+     text-align: left;
   }
   .update__form button {
     cursor: pointer;
@@ -187,6 +193,8 @@
     border: none;
     border-radius: 50%;
     color: transparent;
+    background-color:  transparent;
+    padding: 0;
     margin-top: 0;
     margin-bottom: 0;
     display: flex;

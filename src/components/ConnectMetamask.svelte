@@ -58,33 +58,44 @@
 </script>
 
 <div class="connect__pop-up">
-  {#if !mintOrBuyMessage}
+  <div class="connect__pop-up-wrapper">
+    <img class="connect__pop-up-img-mob top" src="https://uploads-ssl.webflow.com/623494ba6746d1d287d735b3/6274bc5c9fea49802900fad5_UFO_3-min.png" alt="pop up img">
     <div class="connect__pop-up-items">
+      {#if !mintOrBuyMessage}
+     
+      <img class="connect__pop-up-img" src="https://global-uploads.webflow.com/623494ba6746d1d287d735b3/6270f418dfac0164e4d550c8_pop-up-planes-p-1080.png" alt="pop up img">
       <p>{connectHeading}</p>
       <p class="errorMessage" class:active={matamaskErrorState}>
         {metamaskErrorMessage}
       </p>
       <button on:click={connectMetamaskWalet}>Connect Metamask</button>
-    </div>
-  {:else if mintOrBuyMessage}
-    <div class="connect__pop-up-items">
+      
+      {:else if mintOrBuyMessage}
+      <img class="connect__pop-up-img" src="https://global-uploads.webflow.com/623494ba6746d1d287d735b3/6270f418dfac0164e4d550c8_pop-up-planes-p-1080.png" alt="pop up img">
       <p>{connectHeading}</p>
       <p class="errorMessage" class:active={matamaskErrorState}>
         {metamaskErrorMessage}
       </p>
       <a href="/home">Go to Home Page</a>
+      {/if}
     </div>
-  {/if}
+    <img class="connect__pop-up-img-mob bottom" src="https://uploads-ssl.webflow.com/623494ba6746d1d287d735b3/6274bd22efef3160bd8e8c13_Planet-min.png" alt="pop up img">
+  
+  </div>
+
 </div>
 
 <style>
+  .connect__pop-up-img-mob{
+    display: none;
+  }
   .connect__pop-up {
     position: fixed;
     top: 0px;
     z-index: 5;
     display: flex;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     -webkit-box-pack: center;
     -webkit-justify-content: center;
     -ms-flex-pack: center;
@@ -93,8 +104,14 @@
     -webkit-align-items: flex-start;
     -ms-flex-align: start;
     align-items: flex-start;
-    backdrop-filter: blur(8px);
-    background-color: rgba(19, 4, 39, 0.85);
+    background-image: url(https://global-uploads.webflow.com/623494ba6746d1d287d735b3/6270f3e9e3d11daa7e9a5c40_pop-up-bg.png), linear-gradient(180deg, #130427, #320459);
+    background-position: 50% 50%, 0px 0px;
+    background-size: cover, auto;
+  }
+  .connect__pop-up-img{
+    width: 60%;
+    margin-top: 100px;
+    margin-bottom: 60px;
   }
 
   .connect__pop-up-items {
@@ -102,7 +119,6 @@
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    margin-top: 20%;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     -webkit-flex-direction: column;
@@ -164,8 +180,41 @@
       font-size: 29px;
       line-height: 32.01px;
     }
-    .connect__pop-up-items {
-      margin-top: 40%;
+   
+  }
+  @media screen and (max-width: 768px) {
+    .connect__pop-up-items p.errorMessage{
+      top: 46px;
     }
+    .connect__pop-up-items p{
+      text-align: center;
+    }
+    .connect__pop-up-items button,
+  .connect__pop-up-items a{
+    margin-top: 40px;
+  }
+    .connect__pop-up-img{
+      display: none;
+    }
+    .connect__pop-up-img-mob{
+    display: block;
+  }
+  .connect__pop-up-img-mob.top{
+    width: 45%;
+    margin: 65px auto 31px auto;
+  }
+  .connect__pop-up-img-mob.bottom{
+    width: 40%;
+    margin-top: 62px;
+    margin-right: 20px;
+    margin-left: auto;
+  }
+    .connect__pop-up-img{
+      display: none;
+    }
+    .connect__pop-up {
+      background-image: url(https://uploads-ssl.webflow.com/623494ba6746d1d287d735b3/6274bb762ccafd758aec83d2_pop-up-mob-bg.png), linear-gradient(180deg, #130427, #320459);
+    }
+   
   }
 </style>
