@@ -1,6 +1,6 @@
 <script>
   import { doc, deleteDoc, updateDoc } from "firebase/firestore";
-  import { clickOutside } from "../clickOutside.js";
+  import { clickOutside } from "./clickOutside.js";
   export let message;
   export let user;
   export let db;

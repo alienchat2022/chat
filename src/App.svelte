@@ -12,9 +12,12 @@
   } from "firebase/firestore";
   import { onDestroy, afterUpdate, beforeUpdate, onMount } from "svelte";
   import CreateUserForm from "./components/AuthForm.svelte";
-  import MessageItem from "./components/MessageItem.svelte";
+  import MessageItem from "./components/Message-Item/MessageItem.svelte";
   import ConnectMetamask from "./components/ConnectMetamask.svelte";
-  import ChatHead from './components/ChatHead.svelte'
+  import ChatHead from "./components/ChatHead.svelte";
+  import Sidebar from "./components/Sidebar.svelte";
+  import SendMessageForm from "./components/Send-Form/SendMessageForm.svelte";
+  import ChatTop from "./components/ChatTop.svelte";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDc0mwx7dNlejQBrS_-cKZh3bI7DjB-zqs",
@@ -28,12 +31,6 @@
 
   // Initialize Firebase
   const app = firebase.initializeApp(firebaseConfig);
-  // const userTokens = [
-  //   123124, 2354235, 5345, 56756, 56756, 859665, 6666555, 456456456,
-  // ];
-
-  import Sidebar from "./components/Sidebar.svelte";
-  import SendMessageForm from "./components/SendMessageForm.svelte";
 
   const db = getFirestore();
 
@@ -45,31 +42,29 @@
     messages = [],
     isUpdating = false,
     updatingFormState = false,
-    autoscroll,
+    // autoscroll,
     chatMessageWrapper,
     tepmError,
     tepmErrorState = false,
     tempMessageWrap,
     chatHeight = 765,
     chatMain,
-    chatForm,
-    w;
+    chatForm;
 
-  beforeUpdate(() => {
-    autoscroll =
-      chatMessageWrapper &&
-      chatMessageWrapper.offsetHeight + chatMessageWrapper.scrollTop >
-        chatMessageWrapper.scrollHeight - 20;
-        
-  });
+  let innerWidth = window.innerWidth;
+
+  beforeUpdate(() => {});
 
   afterUpdate(() => {
-    
-      if (chatMain && chatForm) {
-        chatHeight = chatMain.clientHeight - chatForm.clientHeight - 19;
-        chatMessageWrapper.scrollTo(0, chatMessageWrapper.scrollHeight)
-      }
-     
+    if (chatMain && chatForm) {
+      // set chat max height
+      chatHeight =
+        chatMain.clientHeight -
+        chatForm.clientHeight -
+        19;
+      // scroll to bottom after component update
+      chatMessageWrapper.scrollTo(0, chatMessageWrapper.scrollHeight);
+    }
   });
 
   let q = query(collection(db, "Users"));
@@ -112,6 +107,8 @@
   onDestroy(() => {
     unsubscribe();
   });
+
+  // check if user exist
   function checkIfUserExist() {
     isUpdating = true;
     // get all user data from server
@@ -208,6 +205,7 @@
     }
   };
 
+  // show temporary error message
   function showTepmErrorMessage(text) {
     if (!tepmErrorState) {
       tepmErrorState = true;
@@ -243,7 +241,7 @@
         createdAt: serverTimestamp(),
       };
       await addDoc(collection(db, "Messages"), data);
-      updatingFormState = false
+      updatingFormState = false;
     } catch (error) {
       console.error(error.message);
       return;
@@ -254,7 +252,6 @@
   // scroll to bottom
   function scrollToBottom() {
     setTimeout(() => {
-      //      console.log(chatMessageWrapper);
       chatMessageWrapper.scrollTo({
         top: chatMessageWrapper.scrollHeight,
         left: 0,
@@ -264,24 +261,25 @@
   }
 </script>
 
+<svelte:window bind:innerWidth />
 {#if !userToken}
   <ConnectMetamask bind:userToken {checkIfUserExist} />
 {/if}
 
 <main class="main__chat__wrapper">
   {#if user}
-  <ChatHead />
+    <ChatHead />
   {/if}
   {#if window.innerWidth > 991}
-  <div class="wrapper">
-    <img
-    src="https://uploads-ssl.webflow.com/623494ba6746d1d287d735b3/6256b2a766f2134292eeaa81_Alien%20in%20the%20cabin%20live%20chat%201-min.jpg"
-    alt="chat-bg"
-    class="chat__bg"
-  />
-  </div>
+    <div class="wrapper">
+      <img
+        src="https://uploads-ssl.webflow.com/623494ba6746d1d287d735b3/6256b2a766f2134292eeaa81_Alien%20in%20the%20cabin%20live%20chat%201-min.jpg"
+        alt="chat-bg"
+        class="chat__bg"
+      />
+    </div>
   {/if}
-  
+
   {#if isUpdating}
     <div class="preloader" />
   {/if}
@@ -298,18 +296,10 @@
             <Sidebar {user} />
           </div>
           <div class="column">
-            <div class="chat">
-              {#if window.innerWidth >= 991}
-                <div class="chat__top">
-                  <img
-                    src="https://uploads-ssl.webflow.com/623494ba6746d1d287d735b3/6253cec934f28d0f567c8380_hash2.svg"
-                    alt="hash"
-                  />
-                  <p>general</p>
-                </div>
-              {/if}
+            <div class="chat" >
+              <ChatTop />
 
-              <div class="chat__main" bind:this={chatMain} bind:clientWidth={w}>
+              <div class="chat__main"  bind:this={chatMain}>
                 <div>
                   <div
                     class="chat__messages-wrapper"
@@ -355,17 +345,17 @@
   .main__chat__wrapper {
     position: relative;
   }
-  ul.chat__messages{
+  ul.chat__messages {
     padding: 0;
     margin-bottom: 0;
   }
-  .wrapper{
+  .wrapper {
     position: absolute;
     width: 100%;
-    height: 100%;;
+    height: 100%;
     z-index: -1;
   }
-  
+
   .chat__bg {
     position: absolute;
     width: 100%;
@@ -390,6 +380,7 @@
   .chat {
     background: #1c0b32;
     height: 100%;
+    max-height: 880px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -406,9 +397,6 @@
     justify-content: center;
     align-items: center;
   }
-  .preloader img {
-    width: 314px;
-  }
 
   .chat__wrapper {
     display: grid;
@@ -423,26 +411,11 @@
     padding-top: 24px;
     transition: all ease 0.5s;
     max-height: 770px;
-
   }
 
-  .chat__top {
-    height: 48px;
-    border-bottom: 1px solid #2e1054;
-    padding: 0px 18px 0px 14px;
-    display: flex;
-    align-items: center;
-  }
-  .chat__top p {
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 20px;
-    color: #ffffff;
-    padding-left: 6px;
-  }
   .chat__main {
     padding: 0px 24px 20px 24px;
-    height: 830px;
+    height: 100%;
     overflow: hidden;
   }
 
@@ -453,7 +426,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px auto 0 auto ;
+    margin: 20px auto 0 auto;
     position: relative;
   }
   .main__bg--chat {
@@ -495,10 +468,13 @@
       right: -4px;
     }
     .chat__messages-wrapper {
-      height: 563px;
+      height: 617px;
     }
     .chat__main {
-      height: 630px;
+      height: 100%;
+    }
+    .chat{
+      max-height: 685px;
     }
   }
   @media screen and (max-width: 1230px) {
@@ -506,7 +482,10 @@
       width: 900px;
       height: 608px;
     }
-    .wrapper{
+    .chat{
+      max-height: 515px;
+    }
+    .wrapper {
       height: 100%;
     }
     .container-chat {
@@ -516,25 +495,21 @@
       right: -4px;
     }
     .chat__messages-wrapper {
-      height: 388px;
+       height: 447px; 
     }
     .chat__main {
-      height: 456px;
+      height: 100%;
     }
     .chat__wrapper {
       grid-template-columns: 220px 1fr;
     }
   }
   @media screen and (max-width: 991px) {
+    .chat{
+      max-height: none;
+    }
     .chat__bg {
       display: none;
-    }
-    .connect__pop-up-items p {
-      font-size: 27px;
-      line-height: 30px;
-    }
-    .connect__pop-up-items {
-      margin-top: 35%;
     }
     .chat__main {
       height: 600px;
@@ -555,9 +530,6 @@
       right: 0;
       width: 100%;
       height: 100%;
-    }
-    .left__side--main {
-      display: none;
     }
   }
 </style>

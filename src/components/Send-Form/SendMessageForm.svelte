@@ -7,14 +7,12 @@
   export let tepmError;
   export let updatingFormState;
 
-  import { resize } from "../resize";
+  import { resize } from "./resize";
   let textarea = null,
        height = 48;
   function onResize(e) {
-    console.log(e.target)
     textarea = e.target;
-    height = e.target.CR?.height;
-    console.log(height)
+    height = e.target.clientHeight;
   }
 
   $: rows = (messageText.match(/\n/g) || []).length + 1 || 1;

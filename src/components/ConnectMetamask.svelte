@@ -6,6 +6,8 @@
   export let userToken;
   export let checkIfUserExist;
   let balance;
+  let connectButtonText = 'Connect Metamask'; 
+
   async function getBalance() {
     const { address, contractMethods } = await nft.connectMetamask();
     balance = await contractMethods.getBalance(address);
@@ -35,13 +37,15 @@
     }
   }
 
-
+// connect wallet
   async function connectMetamaskWalet() {
     if (typeof window.ethereum !== "undefined") {
+      connectButtonText = 'Connecting...'
       let networkCorrect = nft.checkMetamaskNetwork();
       if (networkCorrect) {
         getAccount();
       } else {
+        connectButtonText = 'Connect Metamask';
         metamaskErrorMessage = "Change MetaMask network";
         matamaskErrorState = true;
         setTimeout(() => {
@@ -68,7 +72,7 @@
       <p class="errorMessage" class:active={matamaskErrorState}>
         {metamaskErrorMessage}
       </p>
-      <button on:click={connectMetamaskWalet}>Connect Metamask</button>
+      <button on:click={connectMetamaskWalet}>{connectButtonText}</button>
       
       {:else if mintOrBuyMessage}
       <img class="connect__pop-up-img" src="https://global-uploads.webflow.com/623494ba6746d1d287d735b3/6270f418dfac0164e4d550c8_pop-up-planes-p-1080.png" alt="pop up img">
