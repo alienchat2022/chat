@@ -84,7 +84,7 @@
     font-size: 16px;
     line-height: 20px;
     color: #130427;
-    padding: 0 13px 13px 0;
+    padding: 13px;
   }
   .createUser-form label {
     font-weight: 700;

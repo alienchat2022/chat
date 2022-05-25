@@ -148,7 +148,8 @@
   }
   .connect__pop-up-items p.errorMessage {
     position: absolute;
-    top: 60px;
+    top: auto;
+    bottom: 70px;
     opacity: 0;
     -webkit-transition: opacity 200ms ease;
     transition: opacity 200ms ease;
