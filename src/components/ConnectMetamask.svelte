@@ -90,6 +90,9 @@
 </div>
 
 <style>
+  .connect__pop-up-wrapper{
+    width: 100%;
+  }
   .connect__pop-up-img-mob{
     display: none;
   }
